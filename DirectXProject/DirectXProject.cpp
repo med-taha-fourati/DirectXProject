@@ -1,6 +1,5 @@
 // DirectXProject.cpp : Définit le point d'entrée de l'application.
 //
-#include <stdio.h>
 #include <mmdeviceapi.h>
 #include <endpointvolume.h>
 #include "framework.h"
@@ -97,7 +96,13 @@ std::vector<CUSTOMVERTEX_STRUCT> CreateBars(uint32_t number, float height) {
     return vector;
 }
 
-float height = 100;
+void ModifyBar(std::vector<CUSTOMVERTEX_STRUCT>* vertices, uint32_t index, float height) {
+    float calc_height = ((530.f - height) >= 530.f) ? 530.f : 530.f - height;
+    vertices->at(index).vertexes[1].y = 20.f + calc_height;
+    vertices->at(index).vertexes[3].y = 20.f + calc_height;
+}
+
+float height = 200;
 std::vector<CUSTOMVERTEX_STRUCT> vertices = CreateBars(15, height);
 int i; // loop de loop
 LPDIRECT3DVERTEXBUFFER9 v_buffer;
@@ -119,14 +124,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 {
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
-    HRESULT hr;
+    LPCWSTR hr;
     IMMDeviceEnumerator *pEnumerator = NULL;
     IMMDevice* pDevice = NULL;
     IAudioMeterInformation* pMeterInfo = NULL;
     if (hPrevInstance) return 0;
-    //hr = DeviceEnum();
-    //EXIT_ON_ERROR(hr);
-
+    hr = DeviceEnum();
+    MessageBox(nullptr, hr, L"error", MB_OK);
+    
     // TODO: Placez le code ici.
 
     // Initialise les chaînes globales
@@ -153,7 +158,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             DispatchMessage(&msg);
         }
 
-        render_frame();
+        
        
     }
 
@@ -234,6 +239,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     wchar_t x[32];
     switch (message)
     {
+    case WM_PAINT:
+        render_frame();
+        break;
     case WM_DESTROY:
         PostQuitMessage(2);
         break;
@@ -291,6 +299,8 @@ HRESULT initD3D(HWND hWnd)
 * In order to render a frame the buffer has to be locked and unlocked to sort of "save"
 * changes
 */
+constexpr float pi = 3.14f;
+int counter = 1;
 
 void render_frame()
 {
@@ -304,19 +314,23 @@ void render_frame()
     VOID* pVoid;    // the void pointer
 
     v_buffer->Lock(0, 0, (void**)&pVoid, 0);    // lock the vertex buffer
-  
+
+    if (counter > 6) counter = 0;
+    counter++;
 
     // copy the vertex buffer to the back buffer
     for (i = 0; i < vertices.size(); i++) {
-        d3ddev->DrawPrimitive(D3DPT_TRIANGLESTRIP, i*4, 2);
-        
+        ModifyBar(&vertices, i, height * std::sinf(pi / (i+1)*counter));
+
+        d3ddev->DrawPrimitive(D3DPT_TRIANGLESTRIP, i * 4, 2);
         v_buffer->Release();
     }
-    bool v = vertices.empty();
-    vertices = CreateBars(15, height);
+    //bool v = vertices.empty();
+    
+    
     wchar_t buf[32];
     swprintf_s(buf, L"%f\n", height);
-    OutputDebugString(buf);
+    //OutputDebugString(buf);
 
     memcpy(pVoid, static_cast<const void*>(vertices.data()), vertices.size() * sizeof(vertices.at(i)));    // copy the vertices to the locked buffer
     v_buffer->Unlock();
