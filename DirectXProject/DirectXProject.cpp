@@ -7,12 +7,98 @@
 #include "DirectXProject.h"
 #include "dx3d1.h"
 #include "AudioHandler.cpp"
+#include <vector>
+#include <iostream>
+#include <stdio.h>
+
+//#include "BarDefinitions.h"
+//#include "BarDefinitions.cpp"
 //#include "SpriteLoader.h"
 //#include "gamesprite.h"
 #define SCREEN_WIDTH  800
 #define SCREEN_HEIGHT 600
 #define MAX_LOADSTRING 100
 #define CUSTOMFVF (D3DFVF_XYZRHW | D3DFVF_DIFFUSE)
+
+struct CUSTOMVERTEX
+{
+    FLOAT x, y, z, rhw;    // from the D3DFVF_XYZRHW flag
+    DWORD color;    // from the D3DFVF_DIFFUSE flag
+};
+
+//CUSTOMVERTEX vertices[][4] =
+//{
+//    // x     y       z     rhw   color
+//    {{ 20.0f, 530.f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
+//    { 20.0f, 20.f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
+//    { 44.0f, 530.0f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
+//    { 44.0f, 20.0f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) }},
+//
+//    {{ 64.0f, 530.f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
+//    { 64.0f, 20.f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
+//    { 88.0f, 530.0f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
+//    { 88.0f, 20.0f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) }},
+//
+//    {{ 108.0f, 530.f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
+//    { 108.0f, 20.f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
+//    { 132.0f, 530.0f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
+//    { 132.0f, 20.0f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) }},
+//
+//    {{ 152.0f, 530.f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
+//    { 152.0f, 20.f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
+//    { 176.0f, 530.0f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
+//    { 176.0f, 20.0f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) }},
+//
+//    {{ 196.0f, 530.f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
+//    { 196.0f, 20.f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
+//    { 220.0f, 530.0f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
+//    { 220.0f, 20.0f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) }} ,
+//
+//    {{ 240.0f, 530.f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
+//    { 240.0f, 20.f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
+//    { 264.0f, 530.0f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
+//    { 264.0f, 20.0f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) }},
+//
+//    {{ 284.0f, 530.f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
+//    { 284.0f, 20.f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
+//    { 308.0f, 530.0f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
+//    { 308.0f, 20.0f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) }}
+//};
+
+struct CUSTOMVERTEX_STRUCT {
+    CUSTOMVERTEX vertexes[4];
+};
+
+// temporary success
+// this function creates bars for you
+std::vector<CUSTOMVERTEX_STRUCT> CreateBars(uint32_t number, float height) {
+    std::vector<CUSTOMVERTEX_STRUCT> vector = std::vector<CUSTOMVERTEX_STRUCT>();
+    constexpr float starting = 20.f;
+    constexpr float width = 24.f;
+    float counter = starting;
+    float calc_height = ((530.f - height) >= 530.f) ? 530.f : 530.f - height;
+    for (uint32_t i = 0; i < number; i++) {
+        CUSTOMVERTEX vertex[4] = {
+                { counter, 530.f, 1.f, 1.0f, D3DCOLOR_XRGB(255, 255, 0)},
+                { counter, 20.f + calc_height, 1.f, 1.0f, D3DCOLOR_XRGB(255, 255, 0) },
+                { counter + width, 530.0f, 1.f, 1.0f, D3DCOLOR_XRGB(255, 255, 0)},
+                { counter + width, 20.0f + calc_height, 1.f, 1.0f, D3DCOLOR_XRGB(255, 255, 0) }
+        };
+        CUSTOMVERTEX_STRUCT v_struct;
+        v_struct.vertexes[0] = vertex[0];
+        v_struct.vertexes[1] = vertex[1];
+        v_struct.vertexes[2] = vertex[2];
+        v_struct.vertexes[3] = vertex[3];
+        
+        vector.push_back(v_struct);
+        counter += width + starting;
+    }
+
+    return vector;
+}
+
+float height = 100;
+std::vector<CUSTOMVERTEX_STRUCT> vertices = CreateBars(15, height);
 int i; // loop de loop
 LPDIRECT3DVERTEXBUFFER9 v_buffer;
 // Variables globales :
@@ -38,7 +124,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     IMMDevice* pDevice = NULL;
     IAudioMeterInformation* pMeterInfo = NULL;
     if (hPrevInstance) return 0;
-    hr = DeviceEnum();
+    //hr = DeviceEnum();
     //EXIT_ON_ERROR(hr);
 
     // TODO: Placez le code ici.
@@ -66,7 +152,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
+
+        render_frame();
+       
     }
+
+    cleanD3D();
 
     return (int) msg.wParam;
 }
@@ -110,23 +201,25 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 //        Dans cette fonction, nous enregistrons le handle de l'instance dans une variable globale, puis
 //        nous créons et affichons la fenêtre principale du programme.
 //
+
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // Stocke le handle d'instance dans la variable globale
 
    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, nullptr, nullptr, hInstance, nullptr);
+      20, 20, SCREEN_WIDTH, SCREEN_HEIGHT, nullptr, nullptr, hInstance, nullptr);
 
    if (!hWnd)
    {
       return FALSE;
    }
+
    initD3D(hWnd);
    ShowWindow(hWnd, nCmdShow);
    init_graphics();
-   render_frame();
-   UpdateWindow(hWnd);
-   cleanD3D();
+   
+   
+   //cleanD3D();
    //GameSprite *gs = new GameSprite();
    //gs->Init(hWnd, true);
    //spL = new SpriteLoader(100,100);
@@ -138,16 +231,35 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    wchar_t x[32];
     switch (message)
     {
     case WM_DESTROY:
         PostQuitMessage(2);
         break;
+    case WM_SYSKEYDOWN:
+    case WM_KEYDOWN:
+        swprintf_s(x, L"%c\n", wParam);
+        OutputDebugString(x);
+        switch (*x) {
+        case 'W':
+            height += 10.f;
+            OutputDebugString(L"Added 10\n");
+            break;
+        case 'S':
+            height -= 10.f;
+            OutputDebugString(L"Reduced 10\n");
+            break;
+        }
+
+        break;
+
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
     return 0;
 }
+
 // this function initializes and prepares Direct3D for use
 HRESULT initD3D(HWND hWnd)
 {
@@ -174,11 +286,12 @@ HRESULT initD3D(HWND hWnd)
     }
     return 1;
 }
-struct CUSTOMVERTEX
-{
-    FLOAT x, y, z, rhw;    // from the D3DFVF_XYZRHW flag
-    DWORD color;    // from the D3DFVF_DIFFUSE flag
-};
+
+/*
+* In order to render a frame the buffer has to be locked and unlocked to sort of "save"
+* changes
+*/
+
 void render_frame()
 {
     d3ddev->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
@@ -188,11 +301,26 @@ void render_frame()
     // select the vertex buffer to display
     d3ddev->SetStreamSource(0, v_buffer, 0, sizeof(CUSTOMVERTEX));
 
+    VOID* pVoid;    // the void pointer
+
+    v_buffer->Lock(0, 0, (void**)&pVoid, 0);    // lock the vertex buffer
+  
+
     // copy the vertex buffer to the back buffer
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < vertices.size(); i++) {
         d3ddev->DrawPrimitive(D3DPT_TRIANGLESTRIP, i*4, 2);
+        
         v_buffer->Release();
     }
+    bool v = vertices.empty();
+    vertices = CreateBars(15, height);
+    wchar_t buf[32];
+    swprintf_s(buf, L"%f\n", height);
+    OutputDebugString(buf);
+
+    memcpy(pVoid, static_cast<const void*>(vertices.data()), vertices.size() * sizeof(vertices.at(i)));    // copy the vertices to the locked buffer
+    v_buffer->Unlock();
+
     d3ddev->EndScene();    // ends the 3D scene
     d3ddev->Present(NULL, NULL, NULL, NULL);
     
@@ -205,34 +333,14 @@ void cleanD3D(void)
     d3d->Release();    // close and release Direct3D
 }
 // create three vertices using the CUSTOMVERTEX struct built earlier
-CUSTOMVERTEX vertices[][4] =
-{
-    // x     y       z     rhw   color
-    {{ 20.0f, 530.f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
-    { 20.0f, 20.f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
-    { 44.0f, 530.0f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
-    { 44.0f, 20.0f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) }},
-    
-    {{ 64.0f, 530.f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
-    { 64.0f, 20.f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
-    { 88.0f, 530.0f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
-    { 88.0f, 20.0f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) }},
 
-    {{ 108.0f, 530.f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
-    { 108.0f, 20.f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
-    { 132.0f, 530.0f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
-    { 132.0f, 20.0f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) }},
+//std::vector<CUSTOMVERTEX[]> v_vertices;
 
-    {{ 152.0f, 530.f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
-    { 152.0f, 20.f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
-    { 176.0f, 530.0f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) },
-    { 176.0f, 20.0f, 1.f, 1.0f, D3DCOLOR_XRGB(0, 255, 0) }}
-};
 void init_graphics(void)
 {
 
     // create the vertex and store the pointer into v_buffer, which is created globally
-    d3ddev->CreateVertexBuffer(4 * sizeof(vertices[i]),
+    d3ddev->CreateVertexBuffer(vertices.size() * sizeof(vertices.at(i)),
         0,
         CUSTOMFVF,
         D3DPOOL_MANAGED,
@@ -242,7 +350,7 @@ void init_graphics(void)
     VOID* pVoid;    // the void pointer
 
     v_buffer->Lock(0, 0, (void**)&pVoid, 0);    // lock the vertex buffer
-    memcpy(pVoid, vertices, 4 * sizeof(vertices[i]));    // copy the vertices to the locked buffer
+    memcpy(pVoid, static_cast<const void*>(vertices.data()), vertices.size() * sizeof(vertices.at(i)));    // copy the vertices to the locked buffer
     v_buffer->Unlock();    // unlock the vertex buffer*/
 }
 

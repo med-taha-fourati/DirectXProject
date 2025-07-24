@@ -7,12 +7,12 @@
               if ((punk) != NULL)  \
                 { (punk)->Release(); (punk) = NULL; }
 
-const auto DeviceEnum() {
+static const auto DeviceEnum() {
 	CoInitialize(NULL);
 	IMMDeviceEnumerator* deviceEnumerator = NULL;
 	auto hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), NULL, CLSCTX_INPROC_SERVER,
 		__uuidof(IMMDeviceEnumerator), (LPVOID*)&deviceEnumerator);
-	EXIT_ON_ERROR(hr);
+	//EXIT_ON_ERROR(hr);
 	IMMDevice* defaultDevice = NULL;
 	hr = deviceEnumerator->GetDefaultAudioEndpoint(eRender, eConsole, &defaultDevice);
 	return hr;
