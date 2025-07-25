@@ -1,1 +1,11 @@
-﻿  DirectXProject.vcxproj -> F:\homework_folder_actual\DirectXProject\x64\Debug\DirectXProject.exe
+﻿DirectXProject.obj : error LNK2005: "long __cdecl CaptureDevice(struct IMMDevice *,struct IAudioClient *,struct IAudioCaptureClient *)" (?CaptureDevice@@YAJPEAUIMMDevice@@PEAUIAudioClient@@PEAUIAudioCaptureClient@@@Z) already defined in AudioHandler.obj
+DirectXProject.obj : error LNK2005: "wchar_t * __cdecl GetDeviceName(struct IMMDeviceCollection *,unsigned int)" (?GetDeviceName@@YAPEA_WPEAUIMMDeviceCollection@@I@Z) already defined in AudioHandler.obj
+DirectXProject.obj : error LNK2005: "bool __cdecl PickDevice(struct IMMDeviceCollection *,long *,class std::vector<wchar_t const *,class std::allocator<wchar_t const *> > *)" (?PickDevice@@YA_NPEAUIMMDeviceCollection@@PEAJPEAV?$vector@PEB_WV?$allocator@PEB_W@std@@@std@@@Z) already defined in AudioHandler.obj
+DirectXProject.obj : error LNK2005: "bool __cdecl PickDeviceFromIndex(struct IMMDeviceCollection *,long *,long)" (?PickDeviceFromIndex@@YA_NPEAUIMMDeviceCollection@@PEAJJ@Z) already defined in AudioHandler.obj
+DirectXProject.obj : error LNK2005: "void __cdecl StartCaptureLoop(unsigned char *,unsigned long,unsigned int *,struct IAudioCaptureClient *,long *)" (?StartCaptureLoop@@YAXPEAEKPEAIPEAUIAudioCaptureClient@@PEAJ@Z) already defined in AudioHandler.obj
+DirectXProject.obj : error LNK2005: "void __cdecl StopRecorderService(struct IAudioClient *,struct IAudioCaptureClient *,struct IMMDevice *)" (?StopRecorderService@@YAXPEAUIAudioClient@@PEAUIAudioCaptureClient@@PEAUIMMDevice@@@Z) already defined in AudioHandler.obj
+AudioHandler.obj : error LNK2001: unresolved external symbol IID_IAudioClient
+DirectXProject.obj : error LNK2001: unresolved external symbol IID_IAudioClient
+AudioHandler.obj : error LNK2001: unresolved external symbol IID_IAudioCaptureClient
+DirectXProject.obj : error LNK2001: unresolved external symbol IID_IAudioCaptureClient
+F:\homework_folder_actual\DirectXProject\x64\Debug\DirectXProject.exe : fatal error LNK1120: 2 unresolved externals

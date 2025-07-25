@@ -102,6 +102,19 @@ void ModifyBar(std::vector<CUSTOMVERTEX_STRUCT>* vertices, uint32_t index, float
     vertices->at(index).vertexes[3].y = 20.f + calc_height;
 }
 
+HRESULT hr;
+BYTE buffer;
+DWORD flags;
+uint32_t nFrames;
+//
+IAudioClient* recorderClient = nullptr;
+IAudioCaptureClient* capturer = nullptr;
+IMMDevice* recorderDevice = nullptr;
+//
+void InitializeAudioCapture(void) {
+    hr = CaptureDevice(recorderDevice, recorderClient, capturer);
+}
+
 float height = 200;
 std::vector<CUSTOMVERTEX_STRUCT> vertices = CreateBars(15, height);
 int i; // loop de loop
@@ -127,10 +140,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     LPCWSTR hr;
     IMMDeviceEnumerator *pEnumerator = NULL;
     IMMDevice* pDevice = NULL;
-    IAudioMeterInformation* pMeterInfo = NULL;
     if (hPrevInstance) return 0;
-    hr = DeviceEnum();
-    MessageBox(nullptr, hr, L"error", MB_OK);
+
     
     // TODO: Placez le code ici.
 
@@ -337,6 +348,8 @@ void render_frame()
 
     d3ddev->EndScene();    // ends the 3D scene
     d3ddev->Present(NULL, NULL, NULL, NULL);
+
+    StartCaptureLoop(&buffer, flags, &nFrames, capturer, &hr);
     
 }
 
@@ -345,6 +358,9 @@ void cleanD3D(void)
     v_buffer->Release();
     d3ddev->Release();    // close and release the 3D device
     d3d->Release();    // close and release Direct3D
+
+    // clean the audio as well
+    StopRecorderService(recorderClient, capturer, recorderDevice);
 }
 // create three vertices using the CUSTOMVERTEX struct built earlier
 
