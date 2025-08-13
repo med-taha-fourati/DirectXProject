@@ -5,7 +5,7 @@
 #include "framework.h"
 #include "DirectXProject.h"
 #include "dx3d1.h"
-#include "AudioHandler.cpp"
+#include "AudioHandler.hpp"
 #include <vector>
 #include <iostream>
 #include <stdio.h>
@@ -112,7 +112,7 @@ IAudioCaptureClient* capturer = nullptr;
 IMMDevice* recorderDevice = nullptr;
 //
 void InitializeAudioCapture(void) {
-    hr = CaptureDevice(recorderDevice, recorderClient, capturer);
+    hr = CaptureDevice(&recorderDevice, &recorderClient, &capturer);
 }
 
 float height = 200;
@@ -349,7 +349,7 @@ void render_frame()
     d3ddev->EndScene();    // ends the 3D scene
     d3ddev->Present(NULL, NULL, NULL, NULL);
 
-    StartCaptureLoop(&buffer, flags, &nFrames, capturer, &hr);
+    StartCaptureLoop(&buffer, flags, &nFrames, &capturer, &hr);
     
 }
 
@@ -360,7 +360,7 @@ void cleanD3D(void)
     d3d->Release();    // close and release Direct3D
 
     // clean the audio as well
-    StopRecorderService(recorderClient, capturer, recorderDevice);
+    StopRecorderService(&recorderClient, &capturer, &recorderDevice);
 }
 // create three vertices using the CUSTOMVERTEX struct built earlier
 

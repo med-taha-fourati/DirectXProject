@@ -8,6 +8,7 @@
 #include <strsafe.h>
 #include <audioclient.h>
 #include <assert.h>
+#include "AudioHandler.hpp"
 
 
 #define EXIT_ON_ERROR(hr)  \
@@ -147,7 +148,7 @@ static const auto DeviceEnum() {
 	return deviceNames;
 }
 
-extern "C" HRESULT __cdecl CaptureDevice(IMMDevice* recorder, IAudioClient* recorderClient, IAudioCaptureClient* capturer) {
+extern "C" HRESULT __cdecl CaptureDevice(IMMDevice** recorder, IAudioClient** recorderClient, IAudioCaptureClient** capturer) {
 	IMMDeviceEnumerator* enumerator = NULL;
 	HRESULT hr = NULL;
 
@@ -156,19 +157,19 @@ extern "C" HRESULT __cdecl CaptureDevice(IMMDevice* recorder, IAudioClient* reco
 
 	std::vector<LPCWSTR> devices = DeviceEnum();
 
-	hr = enumerator->GetDefaultAudioEndpoint(eCapture, eConsole, &recorder);
+	hr = enumerator->GetDefaultAudioEndpoint(eCapture, eConsole, recorder);
 	assert(SUCCEEDED(hr));
 	hr = enumerator->Release();
 	assert(SUCCEEDED(hr));
-	hr = recorder->Activate(IID_IAudioClient, 
+	hr = (*recorder)->Activate(IID_IAudioClient, 
 							CLSCTX_ALL, 
 							NULL, 
-							(void**)&recorderClient);
+							(void**)recorderClient);
 	assert(SUCCEEDED(hr));
-	hr = recorderClient->GetMixFormat(&format);
+	hr = (*recorderClient)->GetMixFormat(&format);
 	assert(SUCCEEDED(hr));
 
-	hr = recorderClient->Initialize(
+	hr = (*recorderClient)->Initialize(
 		AUDCLNT_SHAREMODE_SHARED,
 		0, // Stream Flags
 		10000000, // Time to capture in nanoseconds
@@ -177,10 +178,10 @@ extern "C" HRESULT __cdecl CaptureDevice(IMMDevice* recorder, IAudioClient* reco
 		NULL
 	);
 
-	hr = recorderClient->GetService(IID_IAudioCaptureClient, (void**)&capturer);
+	hr = (*recorderClient)->GetService(IID_IAudioCaptureClient, (void**)&capturer);
 	assert(SUCCEEDED(hr));
 
-	hr = recorderClient->Start();
+	hr = (*recorderClient)->Start();
 	assert(SUCCEEDED(hr));
 
 	return hr;
@@ -190,23 +191,23 @@ extern "C" HRESULT __cdecl CaptureDevice(IMMDevice* recorder, IAudioClient* reco
 extern "C" void __cdecl StartCaptureLoop(BYTE* buffer,
 					  DWORD flags,
 					  uint32_t* nFrames,
-					  IAudioCaptureClient* capturer, 
+					  IAudioCaptureClient** capturer, 
 					  HRESULT* hr) {
 	// ...aaaand we're back
 
-	*hr = capturer->GetBuffer(&buffer, nFrames, &flags, nullptr, nullptr);
-	*hr = capturer->ReleaseBuffer(*nFrames);
+	*hr = (**capturer).GetBuffer(&buffer, nFrames, &flags, nullptr, nullptr);
+	*hr = (**capturer).ReleaseBuffer(*nFrames);
 
 	// memcpy(renderBuffer, captureBuffer, format->nBlockAlign * nFrames); loopback thing
 }
 
-extern "C" void __cdecl StopRecorderService(IAudioClient* recorderClient,
-	IAudioCaptureClient* capturer,
-	IMMDevice* recorderDevice) {
+extern "C" void __cdecl StopRecorderService(IAudioClient** recorderClient,
+	IAudioCaptureClient** capturer,
+	IMMDevice** recorderDevice) {
 
-	recorderClient->Stop();
-	capturer->Release();
-	recorderDevice->Release();
+	(*recorderClient)->Stop();
+	(**capturer).Release();
+	(*recorderDevice)->Release();
 
 	CoUninitialize();
 }
