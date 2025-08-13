@@ -169,6 +169,11 @@ extern "C" HRESULT __cdecl CaptureDevice(IMMDevice** recorder, IAudioClient** re
 	hr = (*recorderClient)->GetMixFormat(&format);
 	assert(SUCCEEDED(hr));
 
+	wchar_t bps[500];
+	swprintf_s(bps, L"Bitrate per sample: %d\n", format->wBitsPerSample);
+	OutputDebugString(bps);
+	
+
 	hr = (*recorderClient)->Initialize(
 		AUDCLNT_SHAREMODE_SHARED,
 		0, // Stream Flags

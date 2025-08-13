@@ -35,6 +35,9 @@
     <ClInclude Include="AudioHandler.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="BufferCapture.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectXProject.cpp">
@@ -44,6 +47,9 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="IIDRedefinitions.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="BufferCapture.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>

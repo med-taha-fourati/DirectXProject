@@ -9,6 +9,7 @@
 #include <vector>
 #include <iostream>
 #include <stdio.h>
+#include "BufferCapture.h"
 
 //#include "BarDefinitions.h"
 //#include "BarDefinitions.cpp"
@@ -331,7 +332,7 @@ void render_frame()
 
     // copy the vertex buffer to the back buffer
     for (i = 0; i < vertices.size(); i++) {
-        ModifyBar(&vertices, i, height * std::sinf(pi / (i+1)*counter));
+        ModifyBar(&vertices, i, height * getAmplitude(&buffer, i));
 
         d3ddev->DrawPrimitive(D3DPT_TRIANGLESTRIP, i * 4, 2);
         v_buffer->Release();
@@ -350,6 +351,8 @@ void render_frame()
     d3ddev->Present(NULL, NULL, NULL, NULL);
 
     StartCaptureLoop(&buffer, flags, &nFrames, &capturer, &hr);
+
+    _printByte(&buffer, nFrames, i);
     
 }
 

@@ -142,6 +142,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AudioHandler.hpp" />
+    <ClInclude Include="BufferCapture.h" />
     <ClInclude Include="DirectXProject.h" />
     <ClInclude Include="dx3d1.h" />
     <ClInclude Include="framework.h" />
@@ -151,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AudioHandler.cpp" />
+    <ClCompile Include="BufferCapture.cpp" />
     <ClCompile Include="DirectXProject.cpp" />
     <ClCompile Include="IIDRedefinitions.cpp" />
   </ItemGroup>
