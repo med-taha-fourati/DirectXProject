@@ -1,7 +1,7 @@
-#include <mmdeviceapi.h>
+#include "IIDRedefinitions.h"
 #include <endpointvolume.h>
 #include <functiondiscoverykeys_devpkey.h>
-#include "resource.h"
+//#include "resource.h"
 #include <iostream>
 #include <stdio.h>
 #include <vector>
@@ -9,17 +9,19 @@
 #include <audioclient.h>
 #include <assert.h>
 
+
 #define EXIT_ON_ERROR(hr)  \
               if (FAILED(hr)) { goto Exit; }
 #define SAFE_RELEASE(punk)  \
               if ((punk) != NULL)  \
                 { (punk)->Release(); (punk) = NULL; }
 
+
 static const auto GetDefaultPlaybackAudioDevice() {
 	LPCWSTR x = L"null";
 	auto hr = CoInitialize(NULL);
 	IMMDeviceEnumerator* deviceEnumerator = NULL;
-	hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), NULL, CLSCTX_INPROC_SERVER,
+	hr = CoCreateInstance(CLSID_MMDeviceEnumerator, NULL, CLSCTX_INPROC_SERVER,
 		__uuidof(IMMDeviceEnumerator), (LPVOID*)&deviceEnumerator);
 	//EXIT_ON_ERROR(hr);
 
@@ -48,7 +50,7 @@ static const auto GetDefaultRecordingAudioDevice() {
 	LPCWSTR x = L"null";
 	auto hr = CoInitialize(NULL);
 	IMMDeviceEnumerator* deviceEnumerator = NULL;
-	hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), NULL, CLSCTX_INPROC_SERVER,
+	hr = CoCreateInstance(IID_MMDeviceEnumerator, NULL, CLSCTX_INPROC_SERVER,
 		__uuidof(IMMDeviceEnumerator), (LPVOID*)&deviceEnumerator);
 	//EXIT_ON_ERROR(hr);
 
@@ -77,7 +79,7 @@ static const auto GetDefaultRecordingAudioDevice() {
 	return x;
 }
 
-LPWSTR GetDeviceName(IMMDeviceCollection* deviceCollection, uint32_t DeviceIndex) {
+extern "C" LPWSTR __cdecl GetDeviceName(IMMDeviceCollection* deviceCollection, uint32_t DeviceIndex) {
 	IMMDevice* device;
 	LPWSTR deviceId;
 	HRESULT hr;
@@ -101,7 +103,7 @@ LPWSTR GetDeviceName(IMMDeviceCollection* deviceCollection, uint32_t DeviceIndex
 	return deviceName;
 }
 
-bool PickDevice(IMMDeviceCollection* deviceCollection, HRESULT* hr, std::vector<LPCWSTR>* result) {
+extern "C" bool __cdecl PickDevice(IMMDeviceCollection* deviceCollection, HRESULT* hr, std::vector<LPCWSTR>* result) {
 	uint32_t deviceCount = 0;
 
 	*hr = deviceCollection->GetCount(&deviceCount);
@@ -116,7 +118,7 @@ bool PickDevice(IMMDeviceCollection* deviceCollection, HRESULT* hr, std::vector<
 	return true;
 }
 
-bool PickDeviceFromIndex(IMMDeviceCollection* deviceCollection, HRESULT* hr, long index) {
+extern "C" bool __cdecl PickDeviceFromIndex(IMMDeviceCollection* deviceCollection, HRESULT* hr, long index) {
 	IMMDevice* device = nullptr;
 	*hr = deviceCollection->Item(index, &device);
 
@@ -145,7 +147,7 @@ static const auto DeviceEnum() {
 	return deviceNames;
 }
 
-HRESULT CaptureDevice(IMMDevice* recorder, IAudioClient* recorderClient, IAudioCaptureClient* capturer) {
+extern "C" HRESULT __cdecl CaptureDevice(IMMDevice* recorder, IAudioClient* recorderClient, IAudioCaptureClient* capturer) {
 	IMMDeviceEnumerator* enumerator = NULL;
 	HRESULT hr = NULL;
 
@@ -185,7 +187,7 @@ HRESULT CaptureDevice(IMMDevice* recorder, IAudioClient* recorderClient, IAudioC
 	// ...and away it goes, see you on the loop
 }
 
-void StartCaptureLoop(BYTE* buffer, 
+extern "C" void __cdecl StartCaptureLoop(BYTE* buffer,
 					  DWORD flags,
 					  uint32_t* nFrames,
 					  IAudioCaptureClient* capturer, 
@@ -198,7 +200,7 @@ void StartCaptureLoop(BYTE* buffer,
 	// memcpy(renderBuffer, captureBuffer, format->nBlockAlign * nFrames); loopback thing
 }
 
-void StopRecorderService(IAudioClient* recorderClient,
+extern "C" void __cdecl StopRecorderService(IAudioClient* recorderClient,
 	IAudioCaptureClient* capturer,
 	IMMDevice* recorderDevice) {
 

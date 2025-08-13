@@ -144,12 +144,14 @@
     <ClInclude Include="DirectXProject.h" />
     <ClInclude Include="dx3d1.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="IIDRedefinitions.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AudioHandler.cpp" />
     <ClCompile Include="DirectXProject.cpp" />
+    <ClCompile Include="IIDRedefinitions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DirectXProject.rc" />

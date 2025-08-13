@@ -29,12 +29,18 @@
     <ClInclude Include="dx3d1.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="IIDRedefinitions.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectXProject.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="AudioHandler.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="IIDRedefinitions.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
