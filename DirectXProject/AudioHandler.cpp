@@ -151,7 +151,7 @@ static const auto DeviceEnum() {
 extern "C" HRESULT __cdecl CaptureDevice(IMMDevice** recorder, IAudioClient** recorderClient, IAudioCaptureClient** capturer) {
 	IMMDeviceEnumerator* enumerator = NULL;
 	HRESULT hr = NULL;
-
+	hr = CoCreateInstance(IID_MMDeviceEnumerator, NULL, CLSCTX_INPROC_SERVER, IID_IMMDeviceEnumerator, (void**)&enumerator);
 	//Optional
 	WAVEFORMATEX* format = NULL;
 
@@ -178,7 +178,7 @@ extern "C" HRESULT __cdecl CaptureDevice(IMMDevice** recorder, IAudioClient** re
 		NULL
 	);
 
-	hr = (*recorderClient)->GetService(IID_IAudioCaptureClient, (void**)&capturer);
+	hr = (*recorderClient)->GetService(IID_IAudioCaptureClient, (void**)capturer);
 	assert(SUCCEEDED(hr));
 
 	hr = (*recorderClient)->Start();
@@ -195,8 +195,10 @@ extern "C" void __cdecl StartCaptureLoop(BYTE* buffer,
 					  HRESULT* hr) {
 	// ...aaaand we're back
 
-	*hr = (**capturer).GetBuffer(&buffer, nFrames, &flags, nullptr, nullptr);
-	*hr = (**capturer).ReleaseBuffer(*nFrames);
+	*hr = (*capturer)->GetBuffer(&buffer, nFrames, &flags, nullptr, nullptr);
+	assert(SUCCEEDED(*hr));
+	*hr = (*capturer)->ReleaseBuffer(*nFrames);
+	assert(SUCCEEDED(*hr));
 
 	// memcpy(renderBuffer, captureBuffer, format->nBlockAlign * nFrames); loopback thing
 }
@@ -206,7 +208,7 @@ extern "C" void __cdecl StopRecorderService(IAudioClient** recorderClient,
 	IMMDevice** recorderDevice) {
 
 	(*recorderClient)->Stop();
-	(**capturer).Release();
+	(*capturer)->Release();
 	(*recorderDevice)->Release();
 
 	CoUninitialize();

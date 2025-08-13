@@ -233,7 +233,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    initD3D(hWnd);
    ShowWindow(hWnd, nCmdShow);
    init_graphics();
-   
+   InitializeAudioCapture();
    
    //cleanD3D();
    //GameSprite *gs = new GameSprite();

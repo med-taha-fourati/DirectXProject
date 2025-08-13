@@ -1,1 +1,8 @@
-﻿  DirectXProject.vcxproj -> C:\Users\trbsh\Documents\DirectXProject\x64\Debug\DirectXProject.exe
+﻿  AudioHandler.cpp
+  DirectXProject.cpp
+C:\Users\trbsh\Documents\DirectXProject\DirectXProject\DirectXProject.cpp(140,13): warning C4101: 'hr': unreferenced local variable
+C:\Users\trbsh\Documents\DirectXProject\DirectXProject\DirectXProject.cpp(261,23): warning C4477: 'swprintf_s' : format string '%c' requires an argument of type 'int', but variadic argument 1 has type 'WPARAM'
+C:\Users\trbsh\Documents\DirectXProject\DirectXProject\DirectXProject.cpp(373,48): warning C4267: 'argument': conversion from 'size_t' to 'UINT', possible loss of data
+  Generating Code...
+C:\Users\trbsh\Documents\DirectXProject\DirectXProject\AudioHandler.cpp(104,1): warning C4172: returning address of local variable or temporary : deviceName
+  DirectXProject.vcxproj -> C:\Users\trbsh\Documents\DirectXProject\x64\Debug\DirectXProject.exe
