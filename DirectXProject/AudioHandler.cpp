@@ -9,6 +9,7 @@
 #include <audioclient.h>
 #include <assert.h>
 #include "AudioHandler.hpp"
+#include "BufferCapture.h"
 
 
 #define EXIT_ON_ERROR(hr)  \
@@ -172,6 +173,12 @@ extern "C" HRESULT __cdecl CaptureDevice(IMMDevice** recorder, IAudioClient** re
 	wchar_t bps[500];
 	swprintf_s(bps, L"Bitrate per sample: %d\n", format->wBitsPerSample);
 	OutputDebugString(bps);
+	wchar_t nch[500];
+	swprintf_s(nch, L"No of channels: %d\n", format->nChannels);
+	OutputDebugString(nch);
+	wchar_t nba[500];
+	swprintf_s(nba, L"Nbr Blocks aligned: %d\n", format->nBlockAlign);
+	OutputDebugString(nba);
 	
 
 	hr = (*recorderClient)->Initialize(
@@ -193,15 +200,51 @@ extern "C" HRESULT __cdecl CaptureDevice(IMMDevice** recorder, IAudioClient** re
 	// ...and away it goes, see you on the loop
 }
 
-extern "C" void __cdecl StartCaptureLoop(BYTE* buffer,
+extern "C" void __cdecl StartCaptureLoop(BYTE** buffer,
 					  DWORD flags,
 					  uint32_t* nFrames,
 					  IAudioCaptureClient** capturer, 
 					  HRESULT* hr) {
 	// ...aaaand we're back
 
-	*hr = (*capturer)->GetBuffer(&buffer, nFrames, &flags, nullptr, nullptr);
+	BYTE* tempBuffer = nullptr;
+	DWORD captureFlags = 0;
+
+	*hr = (*capturer)->GetBuffer(&tempBuffer, nFrames, &flags, nullptr, nullptr);
 	assert(SUCCEEDED(*hr));
+
+	if (FAILED(*hr)) {
+		wchar_t err[128];
+		swprintf_s(err, L"GetBuffer failed with HRESULT: 0x%08X\n", *hr);
+		OutputDebugString(err);
+		return;
+	}
+
+	wchar_t debug[256];
+	swprintf_s(debug, L"GetBuffer SUCCESS - tempBuffer: %p, nFrames: %u, flags: 0x%08X\n",
+		tempBuffer, *nFrames, captureFlags);
+	OutputDebugString(debug);
+
+	if (*nFrames == 0) {
+		OutputDebugString(L"No frames available\n");
+		(*capturer)->ReleaseBuffer(0);
+		return;
+	}
+
+	// Check if buffer pointer is valid
+	if (tempBuffer == nullptr) {
+		OutputDebugString(L"ERROR: tempBuffer is NULL!\n");
+		(*capturer)->ReleaseBuffer(*nFrames);
+		return;
+	}
+
+	_printByte(tempBuffer, *nFrames, 0);
+	wchar_t buf[32];
+	swprintf_s(buf, L"AmplitudeL : %f\n", getAmplitude(tempBuffer, 0));
+	OutputDebugString(buf);
+
+	*buffer = tempBuffer; // this must be released
+
 	*hr = (*capturer)->ReleaseBuffer(*nFrames);
 	assert(SUCCEEDED(*hr));
 

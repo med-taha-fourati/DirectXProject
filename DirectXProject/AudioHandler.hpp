@@ -15,7 +15,7 @@ extern "C" LPWSTR __cdecl GetDeviceName(IMMDeviceCollection* deviceCollection, u
 extern "C" bool __cdecl PickDeviceFromIndex(IMMDeviceCollection* deviceCollection, HRESULT* hr, long index);
 static const auto DeviceEnum();
 extern "C" HRESULT __cdecl CaptureDevice(IMMDevice** recorder, IAudioClient** recorderClient, IAudioCaptureClient** capturer);
-extern "C" void __cdecl StartCaptureLoop(BYTE* buffer,
+extern "C" void __cdecl StartCaptureLoop(BYTE** buffer,
 	DWORD flags,
 	uint32_t* nFrames,
 	IAudioCaptureClient** capturer,

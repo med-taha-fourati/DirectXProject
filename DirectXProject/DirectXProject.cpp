@@ -104,7 +104,7 @@ void ModifyBar(std::vector<CUSTOMVERTEX_STRUCT>* vertices, uint32_t index, float
 }
 
 HRESULT hr;
-BYTE buffer;
+BYTE* buffer;
 DWORD flags;
 uint32_t nFrames;
 //
@@ -332,17 +332,17 @@ void render_frame()
 
     // copy the vertex buffer to the back buffer
     for (i = 0; i < vertices.size(); i++) {
-        ModifyBar(&vertices, i, height * getAmplitude(&buffer, i));
+        ModifyBar(&vertices, i, height);
 
         d3ddev->DrawPrimitive(D3DPT_TRIANGLESTRIP, i * 4, 2);
-        v_buffer->Release();
+        //v_buffer->Release();
     }
     //bool v = vertices.empty();
     
-    
-    wchar_t buf[32];
-    swprintf_s(buf, L"%f\n", height);
-    //OutputDebugString(buf);
+    StartCaptureLoop(&buffer, flags, &nFrames, &capturer, &hr);
+    /*wchar_t buf[32];
+    swprintf_s(buf, L"%f\n", getAmplitude(buffer, i));
+    OutputDebugString(buf);*/
 
     memcpy(pVoid, static_cast<const void*>(vertices.data()), vertices.size() * sizeof(vertices.at(i)));    // copy the vertices to the locked buffer
     v_buffer->Unlock();
@@ -350,9 +350,7 @@ void render_frame()
     d3ddev->EndScene();    // ends the 3D scene
     d3ddev->Present(NULL, NULL, NULL, NULL);
 
-    StartCaptureLoop(&buffer, flags, &nFrames, &capturer, &hr);
-
-    _printByte(&buffer, nFrames, i);
+    //_printByte(&buffer, nFrames, i);
     
 }
 

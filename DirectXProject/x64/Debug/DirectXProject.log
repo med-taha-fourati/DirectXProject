@@ -1,7 +1,3 @@
-﻿  BufferCapture.cpp
-C:\Users\trbsh\Documents\DirectXProject\DirectXProject\BufferCapture.cpp(6,16): warning C4477: 'swprintf_s' : format string '%d' requires an argument of type 'int', but variadic argument 1 has type 'size_t'
-      C:\Users\trbsh\Documents\DirectXProject\DirectXProject\BufferCapture.cpp(6,16):
-      consider using '%zd' in the format string
-  
-C:\Users\trbsh\Documents\DirectXProject\DirectXProject\BufferCapture.cpp(11,10): warning C4101: 'x': unreferenced local variable
+﻿  AudioHandler.cpp
+C:\Users\trbsh\Documents\DirectXProject\DirectXProject\AudioHandler.cpp(105,1): warning C4172: returning address of local variable or temporary : deviceName
   DirectXProject.vcxproj -> C:\Users\trbsh\Documents\DirectXProject\x64\Debug\DirectXProject.exe
