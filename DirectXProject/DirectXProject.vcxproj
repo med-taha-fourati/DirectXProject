@@ -145,6 +145,7 @@
     <ClInclude Include="BufferCapture.h" />
     <ClInclude Include="DirectXProject.h" />
     <ClInclude Include="dx3d1.h" />
+    <ClInclude Include="fft.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="IIDRedefinitions.h" />
     <ClInclude Include="Resource.h" />
@@ -154,6 +155,7 @@
     <ClCompile Include="AudioHandler.cpp" />
     <ClCompile Include="BufferCapture.cpp" />
     <ClCompile Include="DirectXProject.cpp" />
+    <ClCompile Include="fft.cpp" />
     <ClCompile Include="IIDRedefinitions.cpp" />
   </ItemGroup>
   <ItemGroup>
