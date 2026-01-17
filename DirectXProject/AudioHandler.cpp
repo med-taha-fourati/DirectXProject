@@ -10,6 +10,7 @@
 #include <assert.h>
 #include "AudioHandler.hpp"
 #include "BufferCapture.h"
+#include <unordered_map>
 
 
 #define EXIT_ON_ERROR(hr)  \
@@ -200,7 +201,9 @@ extern "C" HRESULT __cdecl CaptureDevice(IMMDevice** recorder, IAudioClient** re
 	// ...and away it goes, see you on the loop
 }
 
-extern "C" void __cdecl StartCaptureLoop(BYTE** buffer,
+extern "C" void __cdecl StartCaptureLoop(
+					std::unordered_map<double, double>* output,
+					BYTE** buffer,
 					  DWORD flags,
 					  uint32_t* nFrames,
 					  IAudioCaptureClient** capturer, 
@@ -220,13 +223,13 @@ extern "C" void __cdecl StartCaptureLoop(BYTE** buffer,
 		return;
 	}
 
-	wchar_t debug[256];
+	/*wchar_t debug[256];
 	swprintf_s(debug, L"GetBuffer SUCCESS - tempBuffer: %p, nFrames: %u, flags: 0x%08X\n",
 		tempBuffer, *nFrames, captureFlags);
-	OutputDebugString(debug);
+	OutputDebugString(debug);*/
 
 	if (*nFrames == 0) {
-		OutputDebugString(L"No frames available\n");
+		//OutputDebugString(L"No frames available\n");
 		(*capturer)->ReleaseBuffer(0);
 		return;
 	}
@@ -239,9 +242,15 @@ extern "C" void __cdecl StartCaptureLoop(BYTE** buffer,
 	}
 
 	_printByte(tempBuffer, *nFrames, 0);
-	wchar_t buf[32];
+	*output = captureWasapiData(*nFrames);
+	for (std::pair<double, double> pair : *output) {
+		wchar_t buf[256];
+		swprintf_s(buf, L"Freq : %lf | Magnitude: %lf \n", pair.first, pair.second);
+		OutputDebugString(buf);
+	}
+	/*wchar_t buf[32];
 	swprintf_s(buf, L"AmplitudeL : %f\n", getAmplitude(tempBuffer, 0));
-	OutputDebugString(buf);
+	OutputDebugString(buf);*/
 
 	*buffer = tempBuffer; // this must be released
 

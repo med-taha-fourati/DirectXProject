@@ -97,6 +97,8 @@ std::vector<CUSTOMVERTEX_STRUCT> CreateBars(uint32_t number, float height) {
     return vector;
 }
 
+std::unordered_map<double, double> output;
+
 void ModifyBar(std::vector<CUSTOMVERTEX_STRUCT>* vertices, uint32_t index, float height) {
     float calc_height = ((530.f - height) >= 530.f) ? 530.f : 530.f - height;
     vertices->at(index).vertexes[1].y = 20.f + calc_height;
@@ -117,7 +119,7 @@ void InitializeAudioCapture(void) {
 }
 
 float height = 200;
-std::vector<CUSTOMVERTEX_STRUCT> vertices = CreateBars(15, height);
+std::vector<CUSTOMVERTEX_STRUCT> vertices = CreateBars(10, height);
 int i; // loop de loop
 LPDIRECT3DVERTEXBUFFER9 v_buffer;
 // Variables globales :
@@ -330,16 +332,34 @@ void render_frame()
     if (counter > 6) counter = 0;
     counter++;
 
-    // copy the vertex buffer to the back buffer
-    for (i = 0; i < vertices.size(); i++) {
-        ModifyBar(&vertices, i, height);
+    StartCaptureLoop(&output, &buffer, flags, &nFrames, &capturer, &hr);
 
+    // copy the vertex buffer to the back buffer
+    //std::vector<double> magnitudes;
+    //magnitudes.reserve(output.size());
+
+    /*
+    * TODO bring the verticies map, from fft.cpp to here so that we map them here
+    * please do the unordered_map sends unorganized data
+    */
+    for (const auto& val : output) {
+        if (i > vertices.size() - 1) {
+            i = 0;
+            break;
+        }
+        ModifyBar(&vertices, i, val.second);
         d3ddev->DrawPrimitive(D3DPT_TRIANGLESTRIP, i * 4, 2);
-        //v_buffer->Release();
+        i++;
     }
+    //for (i = 0; i < vertices.size(); i++) {
+    //    ModifyBar(&vertices, i, magnitudes.at(i));
+
+    //    d3ddev->DrawPrimitive(D3DPT_TRIANGLESTRIP, i * 4, 2);
+    //    //v_buffer->Release();
+    //}
     //bool v = vertices.empty();
     
-    StartCaptureLoop(&buffer, flags, &nFrames, &capturer, &hr);
+    
     /*wchar_t buf[32];
     swprintf_s(buf, L"%f\n", getAmplitude(buffer, i));
     OutputDebugString(buf);*/

@@ -1,5 +1,10 @@
 ﻿  DirectXProject.cpp
-C:\Users\trbsh\Documents\DirectXProject\DirectXProject\DirectXProject.cpp(141,13): warning C4101: 'hr': unreferenced local variable
-C:\Users\trbsh\Documents\DirectXProject\DirectXProject\DirectXProject.cpp(262,23): warning C4477: 'swprintf_s' : format string '%c' requires an argument of type 'int', but variadic argument 1 has type 'WPARAM'
-C:\Users\trbsh\Documents\DirectXProject\DirectXProject\DirectXProject.cpp(374,48): warning C4267: 'argument': conversion from 'size_t' to 'UINT', possible loss of data
+C:\Users\trbsh\Documents\DirectXProject\DirectXProject\DirectXProject.cpp(143,13): warning C4101: 'hr': unreferenced local variable
+C:\Users\trbsh\Documents\DirectXProject\DirectXProject\DirectXProject.cpp(264,23): warning C4477: 'swprintf_s' : format string '%c' requires an argument of type 'int', but variadic argument 1 has type 'WPARAM'
+C:\Users\trbsh\Documents\DirectXProject\DirectXProject\DirectXProject.cpp(345,36): warning C4244: 'argument': conversion from '_Ty1' to 'float', possible loss of data
+C:\Users\trbsh\Documents\DirectXProject\DirectXProject\DirectXProject.cpp(345,36): warning C4244:         with
+C:\Users\trbsh\Documents\DirectXProject\DirectXProject\DirectXProject.cpp(345,36): warning C4244:         [
+C:\Users\trbsh\Documents\DirectXProject\DirectXProject\DirectXProject.cpp(345,36): warning C4244:             _Ty1=const double
+C:\Users\trbsh\Documents\DirectXProject\DirectXProject\DirectXProject.cpp(345,36): warning C4244:         ]
+C:\Users\trbsh\Documents\DirectXProject\DirectXProject\DirectXProject.cpp(389,48): warning C4267: 'argument': conversion from 'size_t' to 'UINT', possible loss of data
   DirectXProject.vcxproj -> C:\Users\trbsh\Documents\DirectXProject\x64\Debug\DirectXProject.exe

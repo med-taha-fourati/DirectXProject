@@ -4,7 +4,7 @@
 #define M_PI 3.14159265358979323846
 #define SAMPLE_RATE 44100 
 
-std::vector<double> targets = { 30, 67, 75, 150, 400, 800, 1600, 4500, 10000, 22050 };
+std::vector<double> targets = { 75, 150, 400, 800, 1600, 4500, 10000, 22050 };
 
 int nextPowerOfTwo(int n) {
     int power = 1;
@@ -63,10 +63,10 @@ void processBuffer(std::unordered_map<double, double>* output, cplx* signal, siz
                 std::cout << targetFreq << "Hz (Bin " << binIdx << "): Mag = "
                     << magnitude << ", Phase = " << phase << std::endl;
 
-                output->insert({ targetFreq, magnitude });
+                output->insert({ targetFreq, magnitude / 1000000000 });
             }
         }
-        output->clear();
+        //output->clear();
     }
 
     delete[] buffer;
