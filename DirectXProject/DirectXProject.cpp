@@ -79,10 +79,10 @@ std::vector<CUSTOMVERTEX_STRUCT> CreateBars(uint32_t number, float height) {
     float calc_height = ((530.f - height) >= 530.f) ? 530.f : 530.f - height;
     for (uint32_t i = 0; i < number; i++) {
         CUSTOMVERTEX vertex[4] = {
-                { counter, 530.f, 1.f, 1.0f, D3DCOLOR_XRGB(255, 255, 0)},
-                { counter, 20.f + calc_height, 1.f, 1.0f, D3DCOLOR_XRGB(255, 255, 0) },
-                { counter + width, 530.0f, 1.f, 1.0f, D3DCOLOR_XRGB(255, 255, 0)},
-                { counter + width, 20.0f + calc_height, 1.f, 1.0f, D3DCOLOR_XRGB(255, 255, 0) }
+                { counter, 530.f, 1.f, 1.0f, D3DCOLOR_XRGB(255, 0, 0)},
+                { counter, 20.f + calc_height, 1.f, 1.0f, D3DCOLOR_XRGB(255, 0, 0) },
+                { counter + width, 530.0f, 1.f, 1.0f, D3DCOLOR_XRGB(255, 0, 0)},
+                { counter + width, 20.0f + calc_height, 1.f, 1.0f, D3DCOLOR_XRGB(255, 0, 0) }
         };
         CUSTOMVERTEX_STRUCT v_struct;
         v_struct.vertexes[0] = vertex[0];

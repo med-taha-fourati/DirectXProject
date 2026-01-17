@@ -1,10 +1,4 @@
 #include "fft.h"
-#include <math.h>
-#include <iostream>
-#include <vector>
-#include <complex>
-#include <algorithm>
-#include <unordered_map>
 
 #define _USE_MATH_DEFINES
 #define M_PI 3.14159265358979323846
@@ -12,7 +6,7 @@
 
 std::vector<double> targets = { 30, 67, 75, 150, 400, 800, 1600, 4500, 10000, 22050 };
 
-constexpr int nextPowerOfTwo(int n) {
+int nextPowerOfTwo(int n) {
     int power = 1;
     while (power < n) power *= 2;
     return power;
@@ -72,6 +66,7 @@ void processBuffer(std::unordered_map<double, double>* output, cplx* signal, siz
                 output->insert({ targetFreq, magnitude });
             }
         }
+        output->clear();
     }
 
     delete[] buffer;
