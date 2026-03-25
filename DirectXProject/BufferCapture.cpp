@@ -19,7 +19,7 @@ float getAmplitude(BYTE* byte, uint32_t i) {
 	return std::abs(samples[i*2]) / 2147483647.0f; // MAXINT32;//
 }
 
-std::unordered_map<double, double> captureWasapiData(uint32_t nFrames) {
+std::vector<double> captureWasapiData(uint32_t nFrames) {
 	size_t signalSize = nFrames;
 	short numChannels = 2;
 
@@ -34,7 +34,7 @@ std::unordered_map<double, double> captureWasapiData(uint32_t nFrames) {
 		complexSignal[i] = cplx(monoSample, 0.0);
 	}
 
-	std::unordered_map<double, double> hiiii;
+	std::vector<double> hiiii;
 
 	processBuffer(&hiiii, complexSignal, signalSize, 1024);
 

@@ -17,7 +17,7 @@ extern "C" bool __cdecl PickDeviceFromIndex(IMMDeviceCollection* deviceCollectio
 static const auto DeviceEnum();
 extern "C" HRESULT __cdecl CaptureDevice(IMMDevice** recorder, IAudioClient** recorderClient, IAudioCaptureClient** capturer);
 extern "C" void __cdecl StartCaptureLoop(
-	std::unordered_map<double,double>* output,
+	std::vector<double>* output,
 	BYTE** buffer,
 	DWORD flags,
 	uint32_t* nFrames,

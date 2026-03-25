@@ -6,7 +6,6 @@
 #include <iostream>
 #include <complex>
 #include <algorithm>
-#include <unordered_map>
 
 #ifdef __cplusplus
 	#include <complex>
@@ -18,7 +17,7 @@
 
 	void fft(cplx* x, size_t N);
 	void processBuffer(
-		std::unordered_map<double, double>* output, 
+		std::vector<double>* output, 
 		cplx* signal, 
 		size_t signalSize, 
 		int bufferSize

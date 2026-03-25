@@ -97,7 +97,7 @@ std::vector<CUSTOMVERTEX_STRUCT> CreateBars(uint32_t number, float height) {
     return vector;
 }
 
-std::unordered_map<double, double> output;
+std::vector<double> output;
 
 void ModifyBar(std::vector<CUSTOMVERTEX_STRUCT>* vertices, uint32_t index, float height) {
     float calc_height = ((530.f - height) >= 530.f) ? 530.f : 530.f - height;
@@ -342,14 +342,11 @@ void render_frame()
     * TODO bring the verticies map, from fft.cpp to here so that we map them here
     * please do the unordered_map sends unorganized data
     */
-    for (const auto& val : output) {
-        if (i > vertices.size() - 1) {
-            i = 0;
-            break;
-        }
-        ModifyBar(&vertices, i, val.second);
+    for (size_t i = 0; i < output.size(); i++) {
+        if (i >= vertices.size()) break;
+
+        ModifyBar(&vertices, i, output[i]);
         d3ddev->DrawPrimitive(D3DPT_TRIANGLESTRIP, i * 4, 2);
-        i++;
     }
     //for (i = 0; i < vertices.size(); i++) {
     //    ModifyBar(&vertices, i, magnitudes.at(i));

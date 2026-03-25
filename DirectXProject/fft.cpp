@@ -33,7 +33,7 @@ void fft(cplx* x, size_t N) {
     }
 }
 
-void processBuffer(std::unordered_map<double, double>* output, cplx* signal, size_t signalSize, int bufferSize) {
+void processBuffer(std::vector<double>* output, cplx* signal, size_t signalSize, int bufferSize) {
     int numBuffers = (signalSize + bufferSize - 1) / bufferSize;
     int paddedSize = nextPowerOfTwo(bufferSize);
     cplx* buffer = new cplx[paddedSize];
@@ -54,16 +54,16 @@ void processBuffer(std::unordered_map<double, double>* output, cplx* signal, siz
 
         fft(buffer, paddedSize);
 
-        for (double targetFreq : targets) {
+        for (size_t t = 0; t < targets.size(); ++t) {
+            double targetFreq = targets[t];
             int binIdx = std::round((targetFreq * paddedSize) / SAMPLE_RATE);
 
             if (binIdx >= 0 && binIdx < (paddedSize / 2)) {
                 double magnitude = std::abs(buffer[binIdx]);
-                double phase = std::arg(buffer[binIdx]);
-                std::cout << targetFreq << "Hz (Bin " << binIdx << "): Mag = "
-                    << magnitude << ", Phase = " << phase << std::endl;
-
-                output->insert({ targetFreq, magnitude / 1000000000 });
+                (*output)[t] = magnitude / 1000000000;
+            }
+            else {
+                (*output)[t] = 0.0;
             }
         }
         //output->clear();

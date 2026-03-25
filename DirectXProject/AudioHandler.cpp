@@ -12,6 +12,8 @@
 #include "BufferCapture.h"
 #include <unordered_map>
 
+std::vector<double> targetOther = { 75, 150, 400, 800, 1600, 4500, 10000, 22050 };
+
 
 #define EXIT_ON_ERROR(hr)  \
               if (FAILED(hr)) { goto Exit; }
@@ -202,7 +204,7 @@ extern "C" HRESULT __cdecl CaptureDevice(IMMDevice** recorder, IAudioClient** re
 }
 
 extern "C" void __cdecl StartCaptureLoop(
-					std::unordered_map<double, double>* output,
+					std::vector<double>* output,
 					BYTE** buffer,
 					  DWORD flags,
 					  uint32_t* nFrames,
@@ -243,9 +245,9 @@ extern "C" void __cdecl StartCaptureLoop(
 
 	_printByte(tempBuffer, *nFrames, 0);
 	*output = captureWasapiData(*nFrames);
-	for (std::pair<double, double> pair : *output) {
+	for (size_t i = 0; i < output->size(); ++i) {
 		wchar_t buf[256];
-		swprintf_s(buf, L"Freq : %lf | Magnitude: %lf \n", pair.first, pair.second);
+		swprintf_s(buf, L"Freq : %lf | Magnitude: %lf \n", targetOther[i], (*output)[i]);
 		OutputDebugString(buf);
 	}
 	/*wchar_t buf[32];
