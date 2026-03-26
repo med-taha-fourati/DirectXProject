@@ -212,6 +212,17 @@ extern "C" void __cdecl StartCaptureLoop(
 					  HRESULT* hr) {
 	// ...aaaand we're back
 
+	UINT32 packetLength = 0;
+
+	*hr = (*capturer)->GetNextPacketSize(&packetLength);
+	if (FAILED(*hr)) {
+		return;
+	}
+
+	if (packetLength == 0) {
+		return; // no audio yet, totally normal
+	}
+
 	BYTE* tempBuffer = nullptr;
 	DWORD captureFlags = 0;
 
